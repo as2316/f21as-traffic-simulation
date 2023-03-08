@@ -1,4 +1,4 @@
-package controller.csv_reader;
+package Controller.csv_reader;
 
 import models.*;
 

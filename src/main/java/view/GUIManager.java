@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,7 +36,7 @@ public class GUIManager {
     public void initialize_GUI(){
         // Step 1: Create the JFrame
         frame = new JFrame();
-        frame.setSize(600,400);
+        frame.setSize(1270,500);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -70,7 +71,7 @@ public class GUIManager {
             }
         };
         vehicles_table.setModel(vehicles_table_model);
-
+        
         JScrollPane vehicles_scroll_pane = new JScrollPane(vehicles_table);
         vehicles_scroll_pane.setBounds(30, 30, 560, 300);
         vehicles_scroll_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -119,24 +120,24 @@ public class GUIManager {
         statistics_scroll_pane.setViewportView(statistics_table);
 
         // Add Vehicle Table
-        String[][] add_vehicles_data = { {"", "", "", "", "", "", "", ""}   };
-        String[] add_vehicles_cols_title = {"Vehicle", "Type", "Crossing Time", "Direction", "Length", "Emission", "Status", "Segment"};
-
-        add_vehicles_table = new JTable(add_vehicles_data, add_vehicles_cols_title);
-        JScrollPane add_vehicles_scroll_pane = new JScrollPane(add_vehicles_table);
-        add_vehicles_scroll_pane.setBounds(30, 350, 650, 100);
-        panel.add(add_vehicles_scroll_pane);
-        add_vehicles_scroll_pane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Add Vehicle", TitledBorder.CENTER, TitledBorder.TOP));
-        add_vehicles_scroll_pane.setViewportView(add_vehicles_table);
-
-        // Emission Table
-        String[] emission_table_cols_title = {"CO2 (kg)"};
-
-        emission_table = new JTable(emissionList, emission_table_cols_title);
-        JScrollPane emission_scroll_pane = new JScrollPane(emission_table);
-        emission_scroll_pane.setBounds(700, 250, 200, 50);
-        panel.add(emission_scroll_pane);
-        emission_scroll_pane.setViewportView(emission_table);
+//        String[][] add_vehicles_data = { {"", "", "", "", "", "", "", ""}   };
+//        String[] add_vehicles_cols_title = {"Vehicle", "Type", "Crossing Time", "Direction", "Length", "Emission", "Status", "Segment"};
+//
+//        add_vehicles_table = new JTable(add_vehicles_data, add_vehicles_cols_title);
+//        JScrollPane add_vehicles_scroll_pane = new JScrollPane(add_vehicles_table);
+//        add_vehicles_scroll_pane.setBounds(30, 350, 650, 100);
+//        panel.add(add_vehicles_scroll_pane);
+//        add_vehicles_scroll_pane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Add Vehicle", TitledBorder.CENTER, TitledBorder.TOP));
+//        add_vehicles_scroll_pane.setViewportView(add_vehicles_table);
+//
+//        // Emission Table
+//        String[] emission_table_cols_title = {"CO2 (kg)"};
+//
+//        emission_table = new JTable(emissionList, emission_table_cols_title);
+//        JScrollPane emission_scroll_pane = new JScrollPane(emission_table);
+//        emission_scroll_pane.setBounds(700, 250, 200, 50);
+//        panel.add(emission_scroll_pane);
+//        emission_scroll_pane.setViewportView(emission_table);
 
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -149,7 +150,7 @@ public class GUIManager {
 
         // Exit Button:
         JButton exit_button = new JButton("EXIT");
-        exit_button.setBounds(550, 450, 80, 30);
+        exit_button.setBounds(1100, 350, 80, 30);
 
         panel.add(exit_button);
 
@@ -162,20 +163,19 @@ public class GUIManager {
 
         // Add Button:
         JButton add_button = new JButton("ADD");
-        add_button.setBounds(50, 450, 80, 30);
+        add_button.setBounds(50, 350, 80, 30);
 
         panel.add(add_button);
 
-        add_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        add_button.addActionListener(event -> 
+        {
+      	   frame.setEnabled(false);
+      	   AddVehicleForm form = new AddVehicleForm(frame);
+         });
 
         // Cancel Button:
         JButton cancel_button = new JButton("CANCEL");
-        cancel_button.setBounds(250, 450, 100, 30);
+        cancel_button.setBounds(250, 350, 80, 30);
         panel.add(cancel_button);
         frame.setVisible(true);
     }

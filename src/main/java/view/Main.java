@@ -1,12 +1,13 @@
-import controller.csv_reader.CSVReader;
+package view;
+import Controller.csv_reader.CSVReader;
 import models.PhaseWithDuration;
 import models.Vehicle;
-import controller.StatisticsCalculator;
+import Controller.StatisticsCalculator;
 import view.GUIManager;
 
 import java.util.List;
 
-import static controller.GUIRowUtils.*;
+import static Controller.GUIRowUtils.*;
 
 public class Main {
     public static void main(String[] args) {
