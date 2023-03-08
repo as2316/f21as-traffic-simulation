@@ -9,8 +9,8 @@ import java.util.List;
 
 public class CSVReader {
 
-    public static final String INTERSECTION_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/csv_reader/files/intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/csv_reader/files/vehicles.csv";
+    public static final String INTERSECTION_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE CW/f21as-traffic-simulation/src/main/java/controller/csv_reader/files/intersection.csv";
+    public static final String VEHICLES_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE CW/f21as-traffic-simulation/src/main/java/controller/csv_reader/files/vehicles.csv";
     public List<PhaseWithDuration> readIntersectionData(){
         List<PhaseWithDuration> phaseList = new ArrayList<>();
         try {
