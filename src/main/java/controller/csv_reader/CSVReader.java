@@ -11,8 +11,6 @@ import java.util.List;
 
 public class CSVReader {
 
-    public static final String INTERSECTION_FILE_PATH = "src/main/java/controller/csv_reader/files/intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "src/main/java/controller/csv_reader/files/vehicles.csv";
     public List<PhaseWithDuration> readIntersectionData(){
         List<PhaseWithDuration> phaseList = new ArrayList<>();
         try {
