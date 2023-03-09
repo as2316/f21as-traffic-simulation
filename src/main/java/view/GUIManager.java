@@ -130,14 +130,14 @@ public class GUIManager {
 //        add_vehicles_scroll_pane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Add Vehicle", TitledBorder.CENTER, TitledBorder.TOP));
 //        add_vehicles_scroll_pane.setViewportView(add_vehicles_table);
 //
-//        // Emission Table
-//        String[] emission_table_cols_title = {"CO2 (kg)"};
-//
-//        emission_table = new JTable(emissionList, emission_table_cols_title);
-//        JScrollPane emission_scroll_pane = new JScrollPane(emission_table);
-//        emission_scroll_pane.setBounds(700, 250, 200, 50);
-//        panel.add(emission_scroll_pane);
-//        emission_scroll_pane.setViewportView(emission_table);
+        // Emission Table
+        String[] emission_table_cols_title = {"CO2 (kg)"};
+
+        emission_table = new JTable(emissionList, emission_table_cols_title);
+        JScrollPane emission_scroll_pane = new JScrollPane(emission_table);
+        emission_scroll_pane.setBounds(700, 250, 200, 50);
+        panel.add(emission_scroll_pane);
+        emission_scroll_pane.setViewportView(emission_table);
 
 // ---------------------------------------------------------------------------------------------------------------------
 

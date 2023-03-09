@@ -9,12 +9,12 @@ import java.util.List;
 
 public class CSVReader {
 
-    public static final String INTERSECTION_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE CW/f21as-traffic-simulation/src/main/java/controller/csv_reader/files/intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE CW/f21as-traffic-simulation/src/main/java/controller/csv_reader/files/vehicles.csv";
-    public List<PhaseWithDuration> readIntersectionData(){
+    public List<PhaseWithDuration> readIntersectionData(
+            String pathToIntersectionFile
+    ){
         List<PhaseWithDuration> phaseList = new ArrayList<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(INTERSECTION_FILE_PATH));
+            BufferedReader br = new BufferedReader(new FileReader(pathToIntersectionFile));
             String line;
             while((line = br.readLine()) != null){
                 String[] values = line.split(",");
@@ -28,10 +28,12 @@ public class CSVReader {
         return phaseList;
     }
 
-    public List<Vehicle> readVehicleData(){
+    public List<Vehicle> readVehicleData(
+            String pathToVehicleFile
+    ){
         List<Vehicle> vehicleList = new ArrayList<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(VEHICLES_FILE_PATH));
+            BufferedReader br = new BufferedReader(new FileReader(pathToVehicleFile));
             String line;
             while((line = br.readLine()) != null){
                 String[] values = line.split(",");
