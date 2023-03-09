@@ -12,6 +12,7 @@ public class StatisticsCalculator {
     int[][] statisticsData;
 
     public StatisticsCalculator(List<Vehicle> vehicleList){
+        if (vehicleList == null) throw new IllegalArgumentException("Vehicles list cannot be NULL");
         this.vehicleList = vehicleList;
         statisticsData = new int[4][3];
     }

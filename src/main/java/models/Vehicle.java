@@ -14,6 +14,10 @@ public class Vehicle {
 
     /* CONSTRUCTOR */
     public Vehicle(String id, VehicleType type, Integer crossingTime, Direction direction, Integer length, Integer emission, Status status, Segment segment) {
+        if (crossingTime < 0) throw new IllegalArgumentException("Vehicle's crossing time cannot be negative.");
+        if (length < 0) throw new IllegalArgumentException("Vehicle's length should not be negative.");
+        if (emission < 0) throw new IllegalArgumentException("Vehicle's emission cannot be negative");
+
         this.id = id;
         this.type = type;
         this.crossingTime = crossingTime;

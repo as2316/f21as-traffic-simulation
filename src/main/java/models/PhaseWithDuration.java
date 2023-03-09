@@ -7,6 +7,7 @@ public class PhaseWithDuration {
 
     /* CONSTRUCTOR */
     public PhaseWithDuration(Phase phase, int duration) {
+        if (duration < 0) throw new IllegalArgumentException("Phase duration cannot be negative.");
         this.phase = phase;
         this.duration = duration;
     }

@@ -1,5 +1,7 @@
 package view;
 
+import exceptions.GUI_Manager_Exception;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +21,16 @@ public class GUIManager {
     String[][] statisticsList;
     String[][] emissionList;
 
-    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission){
+    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission) throws GUI_Manager_Exception {
+        if (vehicles == null)
+            throw new GUI_Manager_Exception("Vehicles table cannot be NULL");
+        if (phases == null)
+            throw new GUI_Manager_Exception("Phases table cannot be NULL");
+        if (statistics == null)
+            throw new GUI_Manager_Exception("Statistics table cannot be NULL");
+        if (emission == null)
+            throw new GUI_Manager_Exception("Emission table cannot be NULL");
+
         vehiclesList = vehicles;
         phasesList = phases;
         statisticsList = statistics;
