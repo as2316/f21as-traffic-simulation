@@ -1,4 +1,4 @@
-package controller.csv_reader;
+package Controller.csv_reader;
 
 import models.*;
 
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CSVReader {
+
     public List<PhaseWithDuration> readIntersectionData(
             String pathToIntersectionFile
     ){

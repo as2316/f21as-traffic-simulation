@@ -1,5 +1,6 @@
 package controller;
 
+import Controller.StatisticsCalculator;
 import models.*;
 import org.junit.jupiter.api.Test;
 
