@@ -2,6 +2,7 @@ package controller.csv_reader;
 
 import models.*;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class CSVReader {
             }
         } catch (Exception e){
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Intersection file can't be found", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         return phaseList;
     }
@@ -50,6 +52,7 @@ public class CSVReader {
             }
         } catch (Exception e){
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Vehicle file can't be found", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         return vehicleList;
     }
