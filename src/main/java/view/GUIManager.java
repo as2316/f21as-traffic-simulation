@@ -181,7 +181,7 @@ public class GUIManager {
         add_button.addActionListener(event -> 
         {
       	   frame.setEnabled(false);
-      	   AddVehicleForm form = new AddVehicleForm(frame);
+      	   AddVehicleForm form = new AddVehicleForm(frame, vehicles_table);
          });
 
         // Cancel Button:

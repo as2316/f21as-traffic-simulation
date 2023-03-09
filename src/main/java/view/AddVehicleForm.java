@@ -1,6 +1,8 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import Controller.*;
 import models.*;
 import java.awt.BorderLayout;
@@ -26,12 +28,16 @@ public class AddVehicleForm extends JFrame{
     String[] directions = { "LEFT", "RIGHT", "STRAIGHT" };
     String[] vehicleStatus = { "WAITING", "CROSSED" };
     String[] segments = { "S1", "S2", "S3", "S4" };
-    
+
+	private JTable vehicles_table;
     
     
     //constructor
-    public AddVehicleForm(JFrame frame){
-        //set the title
+    public AddVehicleForm(JFrame frame, JTable vehicleTable){
+        // New :
+		vehicles_table = vehicleTable;
+
+		//set the title
         setTitle("New Vehicle");
         setVisible(true);
         setLocationRelativeTo(null);
@@ -139,11 +145,14 @@ public class AddVehicleForm extends JFrame{
         addBtn.addActionListener(ae -> {
         	if(validateInput()) {
         		error.setText("");
-        		Vehicle vehicle = new Vehicle(vehicleTxtField.toString(),VehicleType.valueOf(type.getSelectedItem().toString()),
+        		Vehicle vehicle = new Vehicle(vehicleTxtField.getText().toString(),VehicleType.valueOf(type.getSelectedItem().toString()),
         				Integer.parseInt(crossingTimeTxtField.getText()),Direction.valueOf(direction.getSelectedItem().toString()),
         				Integer.parseInt(lengthTxtField.getText()),Integer.parseInt(emissionTxtField.getText()),
         				Status.valueOf(status.getSelectedItem().toString()),Segment.valueOf(segment.getSelectedItem().toString()));
         		//System.out.println(vehicle.toString());
+
+				DefaultTableModel model = (DefaultTableModel) vehicles_table.getModel();
+				model.addRow(new Object[]{vehicle.getId(), vehicle.getType(), vehicle.getCrossingTime(), vehicle.getDirection(), vehicle.getLength(), vehicle.getEmission(), vehicle.getStatus(), vehicle.getSegment()});
         	}
 //        	System.out.println();
         		
