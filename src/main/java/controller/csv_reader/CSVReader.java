@@ -2,15 +2,17 @@ package controller.csv_reader;
 
 import models.*;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVReader {
 
-    public static final String INTERSECTION_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/csv_reader/files/intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/csv_reader/files/vehicles.csv";
+    public static final String INTERSECTION_FILE_PATH = "src/main/java/controller/csv_reader/files/intersection.csv";
+    public static final String VEHICLES_FILE_PATH = "src/main/java/controller/csv_reader/files/vehicles.csv";
     public List<PhaseWithDuration> readIntersectionData(){
         List<PhaseWithDuration> phaseList = new ArrayList<>();
         try {
@@ -22,8 +24,9 @@ public class CSVReader {
                 PhaseWithDuration pWithDuration = new PhaseWithDuration(p, Integer.parseInt(values[1]));
                 phaseList.add(pWithDuration);
             }
-        } catch (Exception e){
+        } catch (IOException e){
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Vehicle file can't be found", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         return phaseList;
     }
@@ -47,8 +50,9 @@ public class CSVReader {
                 );
                 vehicleList.add(v);
             }
-        } catch (Exception e){
+        } catch (IOException e){
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Intersection file can't be found", "Warning", JOptionPane.WARNING_MESSAGE);
         }
         return vehicleList;
     }
