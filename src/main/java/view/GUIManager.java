@@ -1,8 +1,14 @@
 package view;
 
+import Controller.Random_Utilities.Random_Vehicle;
+import Controller.Random_Utilities.Random_Vehicles_Caller;
+import Controller.Report_Generator;
+import exceptions.GUI_Manager_Exception;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +24,16 @@ public class GUIManager {
     String[][] statisticsList;
     String[][] emissionList;
 
-    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission){
+    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission) throws GUI_Manager_Exception {
+        if (vehicles == null)
+            throw new GUI_Manager_Exception("Vehicles table cannot be NULL");
+        if (phases == null)
+            throw new GUI_Manager_Exception("Phases table cannot be NULL");
+        if (statistics == null)
+            throw new GUI_Manager_Exception("Statistics table cannot be NULL");
+        if (emission == null)
+            throw new GUI_Manager_Exception("Emission table cannot be NULL");
+
         vehiclesList = vehicles;
         phasesList = phases;
         statisticsList = statistics;
@@ -35,7 +50,7 @@ public class GUIManager {
     public void initialize_GUI(){
         // Step 1: Create the JFrame
         frame = new JFrame();
-        frame.setSize(600,400);
+        frame.setSize(1270,500);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -70,7 +85,7 @@ public class GUIManager {
             }
         };
         vehicles_table.setModel(vehicles_table_model);
-
+        
         JScrollPane vehicles_scroll_pane = new JScrollPane(vehicles_table);
         vehicles_scroll_pane.setBounds(30, 30, 560, 300);
         vehicles_scroll_pane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -119,16 +134,16 @@ public class GUIManager {
         statistics_scroll_pane.setViewportView(statistics_table);
 
         // Add Vehicle Table
-        String[][] add_vehicles_data = { {"", "", "", "", "", "", "", ""}   };
-        String[] add_vehicles_cols_title = {"Vehicle", "Type", "Crossing Time", "Direction", "Length", "Emission", "Status", "Segment"};
-
-        add_vehicles_table = new JTable(add_vehicles_data, add_vehicles_cols_title);
-        JScrollPane add_vehicles_scroll_pane = new JScrollPane(add_vehicles_table);
-        add_vehicles_scroll_pane.setBounds(30, 350, 650, 100);
-        panel.add(add_vehicles_scroll_pane);
-        add_vehicles_scroll_pane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Add Vehicle", TitledBorder.CENTER, TitledBorder.TOP));
-        add_vehicles_scroll_pane.setViewportView(add_vehicles_table);
-
+//        String[][] add_vehicles_data = { {"", "", "", "", "", "", "", ""}   };
+//        String[] add_vehicles_cols_title = {"Vehicle", "Type", "Crossing Time", "Direction", "Length", "Emission", "Status", "Segment"};
+//
+//        add_vehicles_table = new JTable(add_vehicles_data, add_vehicles_cols_title);
+//        JScrollPane add_vehicles_scroll_pane = new JScrollPane(add_vehicles_table);
+//        add_vehicles_scroll_pane.setBounds(30, 350, 650, 100);
+//        panel.add(add_vehicles_scroll_pane);
+//        add_vehicles_scroll_pane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Add Vehicle", TitledBorder.CENTER, TitledBorder.TOP));
+//        add_vehicles_scroll_pane.setViewportView(add_vehicles_table);
+//
         // Emission Table
         String[] emission_table_cols_title = {"CO2 (kg)"};
 
@@ -149,35 +164,41 @@ public class GUIManager {
 
         // Exit Button:
         JButton exit_button = new JButton("EXIT");
-        exit_button.setBounds(550, 450, 80, 30);
+        exit_button.setBounds(1100, 350, 80, 30);
 
         panel.add(exit_button);
+
+        Report_Generator report_generator = new Report_Generator("C:\\Users\\Rami\\Desktop\\report_file.txt");
 
         exit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                report_generator.write_to_file(); System.exit(0);
             }
         });
 
         // Add Button:
         JButton add_button = new JButton("ADD");
-        add_button.setBounds(50, 450, 80, 30);
+        add_button.setBounds(50, 350, 80, 30);
 
         panel.add(add_button);
 
-        add_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        add_button.addActionListener(event -> 
+        {
+      	   frame.setEnabled(false);
+      	   AddVehicleForm form = new AddVehicleForm(frame, vehicles_table);
+         });
 
         // Cancel Button:
         JButton cancel_button = new JButton("CANCEL");
-        cancel_button.setBounds(250, 450, 100, 30);
+        cancel_button.setBounds(250, 350, 80, 30);
         panel.add(cancel_button);
         frame.setVisible(true);
+
+        Thread t = new Thread(new Random_Vehicles_Caller(vehicles_table, report_generator));
+        // Ref: https://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ExecutorService.html
+        t.start();
+
     }
 
 }
