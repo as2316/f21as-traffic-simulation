@@ -1,21 +1,13 @@
 package models;
 
-public class VehicleWithCrossTime {
-    private Vehicle vehicle;
+public class VehicleWithCrossTime extends Vehicle {
     private int willCrossAtTime;
 
     public VehicleWithCrossTime(Vehicle vehicle, int willCrossAtTime) {
-        this.vehicle = vehicle;
+        super(vehicle.getId(), vehicle.getType(), vehicle.getCrossingTime(), vehicle.getDirection(), vehicle.getLength(), vehicle.getEmission(), vehicle.getStatus(), vehicle.getSegment());
         this.willCrossAtTime = willCrossAtTime;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
 
     public int getWillCrossAtTime() {
         return willCrossAtTime;

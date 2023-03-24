@@ -53,7 +53,9 @@ public class Random_Vehicle {
     }
 
     private Status generate_rand_vehicle_status() {
-        return Status.values()[new Random().nextInt(Status.values().length)];
+        //todo: do not randomize this, we need only "waiting" vehicles
+//        return Status.values()[new Random().nextInt(Status.values().length)];
+        return Status.WAITING;
     }
 
     private Integer generate_rand_vehicle_emission() {
@@ -74,7 +76,7 @@ public class Random_Vehicle {
 
     private Integer generate_rand_vehicle_crossing_time() {
         Random rand = new Random();
-        int upper_range = 10;
+        int upper_range = 5;   //todo: making it small to simulate the stuff faster
         return rand.nextInt(upper_range) + 1;
     }
 

@@ -1,10 +1,11 @@
 package Controller.phase_simulation;
 
 import models.Phase;
+import models.Status;
 import models.Vehicle;
 import models.VehicleWithCrossTime;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,13 +16,13 @@ public class PhaseThread extends Thread {
     private PhaseTimeCompleteHandler phaseCompleteHandler;
     private TimerTickHandler timerTickHandler;
     private final PhaseManager.TrafficLight trafficLight;
-    private Queue<VehicleWithCrossTime> queue;
     private int phaseTime;
     private int timeElapsed = 0;
     private TimerTask task;
     private Timer timer;
     private boolean isPhaseRunning;
     private Queue<VehicleWithCrossTime> vehicleWithCrossTimeQueue;
+    private List<VehicleWithCrossTime> crossedVehicleList;
     private int lastVehicleWillCrossAt = 0;
 
     interface PhaseTimeCompleteHandler {
@@ -38,29 +39,25 @@ public class PhaseThread extends Thread {
             PhaseTimeCompleteHandler phaseCompleteHandler,
             TimerTickHandler timerTickHandler,
             PhaseManager.TrafficLight ap,
-            Queue<Vehicle> vehicleQueue
+            Queue<VehicleWithCrossTime> vehicleQueue,
+            List<VehicleWithCrossTime> crossedVehicleList
     ){
-        this.vehicleWithCrossTimeQueue = new LinkedList<>();
+        this.vehicleWithCrossTimeQueue = vehicleQueue;
         this.phase = phase;
         this.phaseTime = phaseTime;
         this.phaseCompleteHandler = phaseCompleteHandler;
         this.timerTickHandler = timerTickHandler;
         this.trafficLight = ap;
         this.isPhaseRunning = false;
-        convertVehicleQueue(vehicleQueue);
+        this.crossedVehicleList = crossedVehicleList;
+        updateCrossingAtTimes();
     }
 
-    private void convertVehicleQueue(Queue<Vehicle> vehicleQueue){
-        for(Vehicle v: vehicleQueue){
-            vehicleWithCrossTimeQueue.add(
-                    addCrossTimeToVehicle(v)
-            );
+    private void updateCrossingAtTimes(){
+        for(VehicleWithCrossTime v: vehicleWithCrossTimeQueue){
+            lastVehicleWillCrossAt += v.getCrossingTime();
+            v.setWillCrossAtTime(lastVehicleWillCrossAt);
         }
-    }
-
-    private VehicleWithCrossTime addCrossTimeToVehicle(Vehicle v){
-        lastVehicleWillCrossAt += v.getCrossingTime();
-        return new VehicleWithCrossTime(v, lastVehicleWillCrossAt);
     }
 
     @Override
@@ -93,6 +90,8 @@ public class PhaseThread extends Thread {
 
             System.out.println("Total vehicles in line: "+vehicleWithCrossTimeQueue.size()+", Total Crossing time: "+lastVehicleWillCrossAt+"s");
 
+            System.out.println(vehicleWithCrossTimeQueue);
+
             //Run the timer for this phase
             timeElapsed = 0;    //Start the timer afresh
             task = new TimerTask() {
@@ -111,7 +110,9 @@ public class PhaseThread extends Thread {
                             System.out.println("No more vehicles present in line in phase "+phase);
                         } else if(timeElapsed == vehicleWithCrossTimeQueue.peek().getWillCrossAtTime()){
                             VehicleWithCrossTime vehicleRemoved = vehicleWithCrossTimeQueue.poll();
-                            System.out.println("Vehicle "+vehicleRemoved.getVehicle().getId()+" crossed at time "+timeElapsed+"s");
+                            vehicleRemoved.setStatus(Status.CROSSED);
+                            crossedVehicleList.add(0, vehicleRemoved);
+                            System.out.println("Vehicle "+vehicleRemoved.getId()+" crossed at time "+timeElapsed+"s");
                         }
 
                     }
@@ -144,10 +145,15 @@ public class PhaseThread extends Thread {
         int crossTime = 0;
 
         for(VehicleWithCrossTime vehicleWithCrossTime: vehicleWithCrossTimeQueue){
-            crossTime += vehicleWithCrossTime.getVehicle().getCrossingTime();
+            crossTime += vehicleWithCrossTime.getCrossingTime();
             vehicleWithCrossTime.setWillCrossAtTime(crossTime);
         }
 
         lastVehicleWillCrossAt = crossTime;
+    }
+
+    public void startThisPhaseThread(){
+        updateCrossingAtTimes();
+        this.start();
     }
 }
