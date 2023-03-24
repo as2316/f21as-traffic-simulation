@@ -45,6 +45,7 @@ public class GUIManager {
     private JTable emission_table;
 
     DefaultTableModel vehicles_table_model;
+    DefaultTableModel statistics_table_model;
 
     public void initialize_GUI(){
         // Step 1: Create the JFrame
@@ -116,7 +117,7 @@ public class GUIManager {
         String[] statistics_table_cols_title = {"Segment", "Waiting Time", "Waiting Length", "Cross Time"};
 
         statistics_table = new JTable(statisticsList, statistics_table_cols_title);
-        DefaultTableModel statistics_table_model = new DefaultTableModel(statisticsList, statistics_table_cols_title) {
+        statistics_table_model = new DefaultTableModel(statisticsList, statistics_table_cols_title) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -198,6 +199,15 @@ public class GUIManager {
             vehicles_table_model.setRowCount(0);
             for(String[] row: vehiclesList){
                 vehicles_table_model.addRow(row);
+            }
+        }
+    }
+
+    public void updateStatistics(String[][] statisticsList){
+        if(statistics_table_model != null){
+            statistics_table_model.setRowCount(0);
+            for(String[] row: statisticsList){
+                statistics_table_model.addRow(row);
             }
         }
     }

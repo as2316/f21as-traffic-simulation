@@ -25,6 +25,8 @@ public class PhaseThread extends Thread {
     private List<VehicleWithCrossTime> crossedVehicleList;
     private int lastVehicleWillCrossAt = 0;
 
+    private int waitingTime = 0;
+
     interface PhaseTimeCompleteHandler {
         public void onPhaseTimeComplete(Phase p);
     }
@@ -50,14 +52,6 @@ public class PhaseThread extends Thread {
         this.trafficLight = ap;
         this.isPhaseRunning = false;
         this.crossedVehicleList = crossedVehicleList;
-        updateCrossingAtTimes();
-    }
-
-    private void updateCrossingAtTimes(){
-        for(VehicleWithCrossTime v: vehicleWithCrossTimeQueue){
-            lastVehicleWillCrossAt += v.getCrossingTime();
-            v.setWillCrossAtTime(lastVehicleWillCrossAt);
-        }
     }
 
     @Override
@@ -111,6 +105,7 @@ public class PhaseThread extends Thread {
                         } else if(timeElapsed == vehicleWithCrossTimeQueue.peek().getWillCrossAtTime()){
                             VehicleWithCrossTime vehicleRemoved = vehicleWithCrossTimeQueue.poll();
                             vehicleRemoved.setStatus(Status.CROSSED);
+                            waitingTime -= vehicleRemoved.getCrossingTime();
                             crossedVehicleList.add(0, vehicleRemoved);
                             System.out.println("Vehicle "+vehicleRemoved.getId()+" crossed at time "+timeElapsed+"s");
                         }
@@ -153,7 +148,17 @@ public class PhaseThread extends Thread {
     }
 
     public void startThisPhaseThread(){
-        updateCrossingAtTimes();
-        this.start();
+        start();
+    }
+
+    public void addVehicleToQueue(Vehicle v){
+        lastVehicleWillCrossAt += v.getCrossingTime();
+        waitingTime = lastVehicleWillCrossAt;
+        VehicleWithCrossTime v1 = new VehicleWithCrossTime(v, lastVehicleWillCrossAt);
+        vehicleWithCrossTimeQueue.add(v1);
+    }
+
+    public int getWaitingTime(){
+        return waitingTime;
     }
 }

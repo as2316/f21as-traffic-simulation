@@ -8,7 +8,6 @@ public class VehicleWithCrossTime extends Vehicle {
         this.willCrossAtTime = willCrossAtTime;
     }
 
-
     public int getWillCrossAtTime() {
         return willCrossAtTime;
     }

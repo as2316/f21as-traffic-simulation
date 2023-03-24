@@ -6,6 +6,7 @@ import Controller.phase_simulation.PhaseManager;
 import exceptions.GUI_Manager_Exception;
 import models.PhaseWithDuration;
 import models.Vehicle;
+import models.VehicleDataForGUI;
 
 import java.util.List;
 
@@ -41,10 +42,10 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
 
         //Step 2: Calculate statistics
         statisticsCalculator = new StatisticsCalculator(vehicleList);
-        statisticsData = statisticsCalculator.calculateSegmentData();
+        statisticsData = statisticsCalculator.calculateStatisticsData();
         emission = statisticsCalculator.calculateEmission();
 
-        PhaseManager phaseManager = new PhaseManager(this);
+        PhaseManager phaseManager = new PhaseManager(this, phasesList);
         phaseManager.setVehicleList(vehicleList);
         phaseManager.start();
 
@@ -53,7 +54,7 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
             guiManager = new GUIManager(
                     vehicleRows(vehicleList),
                     phasesRows(phasesList),
-                    segmentStatsRows(statisticsData),
+                    segmentStatsRows(statisticsData, new int[]{0,0,0,0}),
                     emissionStatsRow(emission)
             );
 
@@ -66,7 +67,13 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
 
 
     @Override
-    public void onUpdate(List<Vehicle> vehicleList) {
+    public void onUpdate(VehicleDataForGUI data) {
+        vehicleList = data.getVehicleList();
+
+        statisticsCalculator.updateVehicleList(vehicleList);
+        statisticsData = statisticsCalculator.calculateStatisticsData();
+
         guiManager.updateVehiclesTable(vehicleRows(vehicleList));
+        guiManager.updateStatistics(segmentStatsRows(statisticsData, data.getWaitingTimes()));
     }
 }

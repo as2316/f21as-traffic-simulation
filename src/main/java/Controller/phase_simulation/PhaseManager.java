@@ -1,8 +1,6 @@
 package Controller.phase_simulation;
 
-import models.Phase;
-import models.Vehicle;
-import models.VehicleWithCrossTime;
+import models.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,7 +22,7 @@ public class PhaseManager {
     VehicleListUpdateHandler vehicleListUpdateHandler;
 
     public interface VehicleListUpdateHandler {
-        void onUpdate(List<Vehicle> vehicleList);
+        void onUpdate(VehicleDataForGUI data);
     }
 
     class TrafficLight {
@@ -46,7 +44,10 @@ public class PhaseManager {
 
     }
 
-    public PhaseManager(VehicleListUpdateHandler vehicleListUpdateHandler){
+    public PhaseManager(
+            VehicleListUpdateHandler vehicleListUpdateHandler,
+            List<PhaseWithDuration> phaseWithDurations
+    ){
         this.vehicleListUpdateHandler = vehicleListUpdateHandler;
 
         trafficLight = new TrafficLight(Phase.p1);
@@ -70,24 +71,20 @@ public class PhaseManager {
         crossedList7 = new ArrayList<>();
         crossedList8 = new ArrayList<>();
 
-        pt1 = new PhaseThread(Phase.p1, 15, phaseHandler, phaseHandler, trafficLight, waitingQueue1, crossedList1);
-        pt2 = new PhaseThread(Phase.p2, 13, phaseHandler, phaseHandler, trafficLight, waitingQueue2, crossedList2);
-        pt3 = new PhaseThread(Phase.p3, 14, phaseHandler, phaseHandler, trafficLight, waitingQueue3, crossedList3);
-        pt4 = new PhaseThread(Phase.p4, 15, phaseHandler, phaseHandler, trafficLight, waitingQueue4, crossedList4);
-        pt5 = new PhaseThread(Phase.p5, 13, phaseHandler, phaseHandler, trafficLight, waitingQueue5, crossedList5);
-        pt6 = new PhaseThread(Phase.p6, 14, phaseHandler, phaseHandler, trafficLight, waitingQueue6, crossedList6);
-        pt7 = new PhaseThread(Phase.p7, 15, phaseHandler, phaseHandler, trafficLight, waitingQueue7, crossedList7);
-        pt8 = new PhaseThread(Phase.p8, 13, phaseHandler, phaseHandler, trafficLight, waitingQueue8, crossedList8);
+        pt1 = new PhaseThread(Phase.p1, phaseWithDurations.get(0).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue1, crossedList1);
+        pt2 = new PhaseThread(Phase.p2, phaseWithDurations.get(1).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue2, crossedList2);
+        pt3 = new PhaseThread(Phase.p3, phaseWithDurations.get(2).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue3, crossedList3);
+        pt4 = new PhaseThread(Phase.p4, phaseWithDurations.get(3).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue4, crossedList4);
+        pt5 = new PhaseThread(Phase.p5, phaseWithDurations.get(4).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue5, crossedList5);
+        pt6 = new PhaseThread(Phase.p6, phaseWithDurations.get(5).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue6, crossedList6);
+        pt7 = new PhaseThread(Phase.p7, phaseWithDurations.get(6).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue7, crossedList7);
+        pt8 = new PhaseThread(Phase.p8, phaseWithDurations.get(7).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue8, crossedList8);
     }
 
     public void setVehicleList(List<Vehicle> vehicleList){
         for(Vehicle v: vehicleList){
             addVehicle(v);
         }
-    }
-
-    private VehicleWithCrossTime convertToVehicleWithTime(Vehicle v){
-        return new VehicleWithCrossTime(v, 0);
     }
 
     public void start(){
@@ -134,12 +131,23 @@ public class PhaseManager {
 
         @Override
         public void onTimerTick(Phase p) {
-            //todo: delete
-            System.out.println("CrossingQueue1: "+ waitingQueue1.size()+", "+"CrossingQueue2: "+ waitingQueue2.size()+", "
-                    +"CrossingQueue1: "+ waitingQueue2.size()+", ");
-            System.out.println("CrossedList1: "+crossedList1.size()+", "+"CrossedList2: "+crossedList2.size()+", "
-                    +"CrossedList3: "+crossedList3.size()+", ");
-            vehicleListUpdateHandler.onUpdate(combineAllQueuesAndLists());
+            vehicleListUpdateHandler.onUpdate(createVehicleDataForGUI());
+        }
+
+        private VehicleDataForGUI createVehicleDataForGUI() {
+            return new VehicleDataForGUI(
+                    combineAllQueuesAndLists(),
+                    createWaitingTimeArray()
+            );
+        }
+
+        private int[] createWaitingTimeArray() {
+            return new int[]{
+                    pt1.getWaitingTime()+ pt6.getWaitingTime(),     //Waiting time for segment 1
+                    pt2.getWaitingTime()+ pt5.getWaitingTime(),     //Waiting time for segment 2
+                    pt3.getWaitingTime()+ pt8.getWaitingTime(),     //Waiting time for segment 3
+                    pt4.getWaitingTime()+ pt7.getWaitingTime(),     //Waiting time for segment 4
+            };
         }
     }
 
@@ -147,28 +155,28 @@ public class PhaseManager {
     public void addVehicle(Vehicle v){
         switch (v.getVehiclePhase()){
             case p1 -> {
-                waitingQueue1.add(convertToVehicleWithTime(v));
+                pt1.addVehicleToQueue(v);
             }
             case p2 -> {
-                waitingQueue2.add(convertToVehicleWithTime(v));
+                pt2.addVehicleToQueue(v);
             }
             case p3 -> {
-                waitingQueue3.add(convertToVehicleWithTime(v));
+                pt3.addVehicleToQueue(v);
             }
             case p4 -> {
-                waitingQueue4.add(convertToVehicleWithTime(v));
+                pt4.addVehicleToQueue(v);
             }
             case p5 -> {
-                waitingQueue5.add(convertToVehicleWithTime(v));
+                pt5.addVehicleToQueue(v);
             }
             case p6 -> {
-                waitingQueue6.add(convertToVehicleWithTime(v));
+                pt6.addVehicleToQueue(v);
             }
             case p7 -> {
-                waitingQueue7.add(convertToVehicleWithTime(v));
+                pt7.addVehicleToQueue(v);
             }
             case p8 -> {
-                waitingQueue8.add(convertToVehicleWithTime(v));
+                pt8.addVehicleToQueue(v);
             }
         }
     }
@@ -205,13 +213,6 @@ public class PhaseManager {
         combinedList.addAll(waitingQueue7);
         combinedList.addAll(waitingQueue8);
         return combinedList;
-    }
-
-    //todo: remove
-    private void printQueuesInCSVFormat(Queue<VehicleWithCrossTime> q){
-        for(VehicleWithCrossTime v: q){
-            v.printInCSVFormat();
-        }
     }
 
 }
