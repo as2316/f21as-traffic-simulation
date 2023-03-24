@@ -12,7 +12,8 @@ import java.util.TimerTask;
 public class PhaseThread extends Thread {
 
     private Phase phase;
-    private PhaseTimeCompleteHandler handler;
+    private PhaseTimeCompleteHandler phaseCompleteHandler;
+    private TimerTickHandler timerTickHandler;
     private final PhaseManager.TrafficLight trafficLight;
     private Queue<VehicleWithCrossTime> queue;
     private int phaseTime;
@@ -27,17 +28,23 @@ public class PhaseThread extends Thread {
         public void onPhaseTimeComplete(Phase p);
     }
 
+    interface TimerTickHandler {
+        public void onTimerTick(Phase p);
+    }
+
     public PhaseThread(
             Phase phase,
             int phaseTime,
-            PhaseTimeCompleteHandler handler,
+            PhaseTimeCompleteHandler phaseCompleteHandler,
+            TimerTickHandler timerTickHandler,
             PhaseManager.TrafficLight ap,
             Queue<Vehicle> vehicleQueue
     ){
         this.vehicleWithCrossTimeQueue = new LinkedList<>();
         this.phase = phase;
         this.phaseTime = phaseTime;
-        this.handler = handler;
+        this.phaseCompleteHandler = phaseCompleteHandler;
+        this.timerTickHandler = timerTickHandler;
         this.trafficLight = ap;
         this.isPhaseRunning = false;
         convertVehicleQueue(vehicleQueue);
@@ -108,6 +115,8 @@ public class PhaseThread extends Thread {
                         }
 
                     }
+
+                    timerTickHandler.onTimerTick(phase);
                 }
             };
 
@@ -120,7 +129,7 @@ public class PhaseThread extends Thread {
         //Stop the timer and notify phase finish event
         System.out.println("~~~~~~~~~~~ RED Light in phase "+ trafficLight.currentGreenLightPhase());
 
-        handler.onPhaseTimeComplete(phase);
+        phaseCompleteHandler.onPhaseTimeComplete(phase);
         isPhaseRunning = false;
 
         prepareVehicleQueueForNextIteration();

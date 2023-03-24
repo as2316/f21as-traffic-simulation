@@ -13,6 +13,8 @@ public class PhaseManager {
 
     TrafficLight trafficLight;
 
+    PhaseHandler phaseHandler;
+
     class TrafficLight {
 
         //This class contains the phase which currently has green light ON
@@ -34,14 +36,15 @@ public class PhaseManager {
 
     public PhaseManager(){
         trafficLight = new TrafficLight(Phase.p1);
+        phaseHandler = new PhaseHandler();
 
         Queue<Vehicle> queue1 = getRandomVehicleQueue(5);
         Queue<Vehicle> queue2 = getRandomVehicleQueue(3);
         Queue<Vehicle> queue3 = getRandomVehicleQueue(4);
 
-        pt1 = new PhaseThread(Phase.p1, 15, new PhaseHandler(), trafficLight, queue1);
-        pt2 = new PhaseThread(Phase.p2, 13, new PhaseHandler(), trafficLight, queue2);
-        pt3 = new PhaseThread(Phase.p3, 14, new PhaseHandler(), trafficLight, queue3);
+        pt1 = new PhaseThread(Phase.p1, 15, phaseHandler, phaseHandler, trafficLight, queue1);
+        pt2 = new PhaseThread(Phase.p2, 13, phaseHandler, phaseHandler, trafficLight, queue2);
+        pt3 = new PhaseThread(Phase.p3, 14, phaseHandler, phaseHandler, trafficLight, queue3);
     }
 
     public void start(){
@@ -50,7 +53,7 @@ public class PhaseManager {
         pt3.start();
     }
 
-    class PhaseHandler implements PhaseThread.PhaseTimeCompleteHandler {
+    class PhaseHandler implements PhaseThread.PhaseTimeCompleteHandler, PhaseThread.TimerTickHandler {
         @Override
         public void onPhaseTimeComplete(Phase p) {
             switch (p){
@@ -75,7 +78,13 @@ public class PhaseManager {
                 }
             }
         }
+
+        @Override
+        public void onTimerTick(Phase p) {
+            //todo: update all queues and lists
+        }
     }
+
 
     private Queue<Vehicle> getRandomVehicleQueue(int size){
         Queue<Vehicle> vehicleQueue = new LinkedList<>();
