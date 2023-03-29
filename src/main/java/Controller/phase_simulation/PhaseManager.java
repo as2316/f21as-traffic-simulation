@@ -71,14 +71,19 @@ public class PhaseManager {
         crossedList7 = new ArrayList<>();
         crossedList8 = new ArrayList<>();
 
-        pt1 = new PhaseThread(Phase.p1, phaseWithDurations.get(0).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue1, crossedList1);
-        pt2 = new PhaseThread(Phase.p2, phaseWithDurations.get(1).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue2, crossedList2);
-        pt3 = new PhaseThread(Phase.p3, phaseWithDurations.get(2).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue3, crossedList3);
-        pt4 = new PhaseThread(Phase.p4, phaseWithDurations.get(3).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue4, crossedList4);
-        pt5 = new PhaseThread(Phase.p5, phaseWithDurations.get(4).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue5, crossedList5);
-        pt6 = new PhaseThread(Phase.p6, phaseWithDurations.get(5).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue6, crossedList6);
-        pt7 = new PhaseThread(Phase.p7, phaseWithDurations.get(6).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue7, crossedList7);
-        pt8 = new PhaseThread(Phase.p8, phaseWithDurations.get(7).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue8, crossedList8);
+        try {
+            pt1 = new PhaseThread(Phase.p1, phaseWithDurations.get(0).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue1, crossedList1);
+            pt2 = new PhaseThread(Phase.p2, phaseWithDurations.get(1).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue2, crossedList2);
+            pt3 = new PhaseThread(Phase.p3, phaseWithDurations.get(2).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue3, crossedList3);
+            pt4 = new PhaseThread(Phase.p4, phaseWithDurations.get(3).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue4, crossedList4);
+            pt5 = new PhaseThread(Phase.p5, phaseWithDurations.get(4).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue5, crossedList5);
+            pt6 = new PhaseThread(Phase.p6, phaseWithDurations.get(5).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue6, crossedList6);
+            pt7 = new PhaseThread(Phase.p7, phaseWithDurations.get(6).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue7, crossedList7);
+            pt8 = new PhaseThread(Phase.p8, phaseWithDurations.get(7).getDuration(), phaseHandler, phaseHandler, trafficLight, waitingQueue8, crossedList8);
+        }
+        catch (IndexOutOfBoundsException e) {
+            System.out.println("Can't find phase duration in the .csv file. Initialization of the threads failed.");
+        }
     }
 
     public void setVehicleList(List<Vehicle> vehicleList){
