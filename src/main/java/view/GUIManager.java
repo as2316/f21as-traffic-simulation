@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ public class GUIManager {
     String[][] phasesList;
     String[][] statisticsList;
     String[][] emissionList;
+
+    List<String> eventLogs;
 
     public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission) throws GUI_Manager_Exception {
         if (vehicles == null)
@@ -170,11 +173,11 @@ public class GUIManager {
 
         panel.add(exit_button);
 
-        Report_Generator report_generator = new Report_Generator("C:\\Users\\Rami\\Desktop\\report_file.txt");  // generate the report on this location
+        // generate the report on this location
         exit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                report_generator.write_to_file(); System.exit(0);
+                //todo: do
             }
         });
 
@@ -213,6 +216,10 @@ public class GUIManager {
                 statistics_table_model.addRow(row);
             }
         }
+    }
+
+    public void setEventLog(List<String> events){
+
     }
 
 }
