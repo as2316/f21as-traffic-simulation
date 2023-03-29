@@ -181,6 +181,7 @@ public class PhaseManager {
         }
     }
 
+    /*
     //todo: remove
     private Queue<VehicleWithCrossTime> getRandomVehicleQueue(int size){
         Queue<VehicleWithCrossTime> vehicleQueue = new LinkedList<>();
@@ -193,7 +194,7 @@ public class PhaseManager {
         }
         return vehicleQueue;
     }
-
+*/
     private List<Vehicle> combineAllQueuesAndLists(){
         List<Vehicle> combinedList = new ArrayList<>();
         combinedList.addAll(crossedList1);

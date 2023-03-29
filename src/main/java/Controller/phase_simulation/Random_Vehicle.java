@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import Controller.Report_Generator;
 import models.*;
 
 import javax.swing.*;
@@ -21,10 +22,10 @@ public class Random_Vehicle {
     private Status status;
     private Segment segment;
 
-
-    // private JTable vehicles_table;                  // table reference to add vehicles to
-    private int number_of_random_vehicles;         // number of random vehicles to generate
     public Random_Vehicle() {
+    }
+
+    public Vehicle getRandomVehicle(){
         vehicle_id = generate_rand_vehicle_id();
         vehicle_type = generate_rand_vehicle_type();
         crossing_time = generate_rand_vehicle_crossing_time();
@@ -33,17 +34,12 @@ public class Random_Vehicle {
         emission = generate_rand_vehicle_emission();
         status = generate_rand_vehicle_status();
         segment = generate_rand_vehicle_segment();
-
-//        System.out.println(vehicle_id + " " + vehicle_type + " " + crossing_time + " " + direction + " " + length + " " +
-//                emission + " " + status + " " + segment);       // debugging
-    }
-
-    public Vehicle getRandomVehicle(){
         return new Vehicle(vehicle_id, vehicle_type, crossing_time, direction, length, emission, status, segment);
     }
 
     // The function responsible for adding the random vehicles to the table
-    private void add_vehicle_to_table(JTable vehicles_table){
+    public void add_vehicle_to_table(JTable vehicles_table){
+        System.out.println("Called to table");
         Vehicle vehicle = new Vehicle(vehicle_id, vehicle_type, crossing_time, direction, length, emission, status, segment);
         DefaultTableModel model = (DefaultTableModel) vehicles_table.getModel();
         model.addRow(new Object[]{vehicle.getId(), vehicle.getType(), vehicle.getCrossingTime(), vehicle.getDirection(), vehicle.getLength(), vehicle.getEmission(), vehicle.getStatus(), vehicle.getSegment()});

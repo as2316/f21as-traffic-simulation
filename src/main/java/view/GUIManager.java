@@ -1,5 +1,7 @@
 package view;
 
+import Controller.Report_Generator;
+import Controller.phase_simulation.Random_Vehicles_Caller;
 import exceptions.GUI_Manager_Exception;
 
 import javax.swing.*;
@@ -168,10 +170,11 @@ public class GUIManager {
 
         panel.add(exit_button);
 
+        Report_Generator report_generator = new Report_Generator("C:\\Users\\Rami\\Desktop\\report_file.txt");  // generate the report on this location
         exit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                report_generator.write_to_file(); System.exit(0);
             }
         });
 

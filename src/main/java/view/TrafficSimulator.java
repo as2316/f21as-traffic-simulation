@@ -3,6 +3,7 @@ package view;
 import Controller.StatisticsCalculator;
 import Controller.csv_reader.CSVReader;
 import Controller.phase_simulation.PhaseManager;
+import Controller.phase_simulation.Random_Vehicles_Caller;
 import exceptions.GUI_Manager_Exception;
 import models.PhaseWithDuration;
 import models.Vehicle;
@@ -16,8 +17,8 @@ import static Controller.GUIRowUtils.emissionStatsRow;
 public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
 
     //Please change this path according to your system
-    public static final String INTERSECTION_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/Controller/csv_reader/files/intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "/media/abheisenberg/New Volume/Abhishek/HW Uni/Jan Sem/Adv Softw Engg/f21as/f21as/src/main/java/Controller/csv_reader/files/vehicles.csv";
+    public static final String INTERSECTION_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Java-Traffic-Sim-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\intersection.csv";
+    public static final String VEHICLES_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Java-Traffic-Sim-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\vehicles.csv";
 
 
     CSVReader csvReader;
@@ -48,6 +49,9 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
         PhaseManager phaseManager = new PhaseManager(this, phasesList);
         phaseManager.setVehicleList(vehicleList);
         phaseManager.start();
+        Random_Vehicles_Caller random_vehicle_caller = new Random_Vehicles_Caller(phaseManager);
+        Thread t = new Thread(random_vehicle_caller);
+        t.start();
 
         //Step 3: Create GUI and display data
         try {
