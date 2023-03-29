@@ -14,11 +14,11 @@ import java.util.List;
 import static Controller.GUIRowUtils.*;
 import static Controller.GUIRowUtils.emissionStatsRow;
 
-public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
+public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler, GUIManager.ExitEventHandler {
 
     //Please change this path according to your system
-    public static final String INTERSECTION_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Java-Traffic-Sim-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Java-Traffic-Sim-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\vehicles.csv";
+    public static final String INTERSECTION_FILE_PATH = "f21as/src/main/java/Controller/csv_reader/files/intersection.csv";
+    public static final String VEHICLES_FILE_PATH = "f21as/src/main/java/Controller/csv_reader/files/vehicles.csv";
 
 
     CSVReader csvReader;
@@ -28,8 +28,8 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
     StatisticsCalculator statisticsCalculator;
     int[][] statisticsData;
     int emission;
-
     GUIManager guiManager;
+    PhaseManager phaseManager;
 
     public TrafficSimulator(){
 
@@ -46,7 +46,7 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
         statisticsData = statisticsCalculator.calculateStatisticsData();
         emission = statisticsCalculator.calculateEmission();
 
-        PhaseManager phaseManager = new PhaseManager(this, phasesList);
+        phaseManager = new PhaseManager(this, phasesList);
         phaseManager.setVehicleList(vehicleList);
         phaseManager.start();
         Random_Vehicles_Caller random_vehicle_caller = new Random_Vehicles_Caller(phaseManager);
@@ -59,7 +59,8 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
                     vehicleRows(vehicleList),
                     phasesRows(phasesList),
                     segmentStatsRows(statisticsData, new int[]{0,0,0,0}),
-                    emissionStatsRow(emission)
+                    emissionStatsRow(emission),
+                    this
             );
 
         } catch (
@@ -79,5 +80,11 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler {
 
         guiManager.updateVehiclesTable(vehicleRows(vehicleList));
         guiManager.updateStatistics(segmentStatsRows(statisticsData, data.getWaitingTimes()));
+    }
+
+    @Override
+    public void onExitButtonPressed() {
+        System.out.println("Exit button pressed");
+        guiManager.saveEventLog(phaseManager.getEventLogs());
     }
 }

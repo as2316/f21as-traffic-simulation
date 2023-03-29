@@ -15,6 +15,7 @@ public class PhaseThread extends Thread {
     private Phase phase;
     private PhaseTimeCompleteHandler phaseCompleteHandler;
     private TimerTickHandler timerTickHandler;
+    private EventLogHandler eventLogHandler;;
     private final PhaseManager.TrafficLight trafficLight;
     private int phaseTime;
     private int timeElapsed = 0;
@@ -35,11 +36,16 @@ public class PhaseThread extends Thread {
         public void onTimerTick(Phase p);
     }
 
+    interface EventLogHandler {
+        public void onEvent(String event);
+    }
+
     public PhaseThread(
             Phase phase,
             int phaseTime,
             PhaseTimeCompleteHandler phaseCompleteHandler,
             TimerTickHandler timerTickHandler,
+            EventLogHandler eventLogHandler,
             PhaseManager.TrafficLight ap,
             Queue<VehicleWithCrossTime> vehicleQueue,
             List<VehicleWithCrossTime> crossedVehicleList
@@ -49,6 +55,7 @@ public class PhaseThread extends Thread {
         this.phaseTime = phaseTime;
         this.phaseCompleteHandler = phaseCompleteHandler;
         this.timerTickHandler = timerTickHandler;
+        this.eventLogHandler = eventLogHandler;
         this.trafficLight = ap;
         this.isPhaseRunning = false;
         this.crossedVehicleList = crossedVehicleList;
@@ -79,6 +86,8 @@ public class PhaseThread extends Thread {
         if(!isPhaseRunning){
             isPhaseRunning = true;
 
+            eventLogHandler.onEvent(getGreenSignalEventString());
+
             System.out.println("\n\n\n\n\n~~~~~~~~~ GREEN light in phase "+trafficLight.currentGreenLightPhase()+" for "+phaseTime+" seconds");
             System.out.println("-------------------------------------------------------------------");
 
@@ -108,6 +117,7 @@ public class PhaseThread extends Thread {
                             waitingTime -= vehicleRemoved.getCrossingTime();
                             crossedVehicleList.add(0, vehicleRemoved);
                             System.out.println("Vehicle "+vehicleRemoved.getId()+" crossed at time "+timeElapsed+"s");
+                            eventLogHandler.onEvent(getVehicleCrossedEventString(vehicleRemoved));
                         }
 
                     }
@@ -124,6 +134,7 @@ public class PhaseThread extends Thread {
     private void phaseTimeOver(){
         //Stop the timer and notify phase finish event
         System.out.println("~~~~~~~~~~~ RED Light in phase "+ trafficLight.currentGreenLightPhase());
+        eventLogHandler.onEvent(getRedSignalEventString());
 
         phaseCompleteHandler.onPhaseTimeComplete(phase);
         isPhaseRunning = false;
@@ -156,9 +167,27 @@ public class PhaseThread extends Thread {
         waitingTime = lastVehicleWillCrossAt;
         VehicleWithCrossTime v1 = new VehicleWithCrossTime(v, lastVehicleWillCrossAt);
         vehicleWithCrossTimeQueue.add(v1);
+        eventLogHandler.onEvent(getVehicleAddedEventString(v));
     }
 
     public int getWaitingTime(){
         return waitingTime;
     }
+
+    private String getVehicleAddedEventString(Vehicle v){
+        return "Vehicle "+v.getId()+" ADDED to Segment "+v.getSegment()+" (Phase "+v.getVehiclePhase()+")\n";
+    }
+
+    private String getVehicleCrossedEventString(Vehicle v){
+        return "Vehicle "+v.getId()+" CROSSED Segment "+v.getSegment()+" (Phase "+v.getVehiclePhase()+")\n";
+    }
+
+    private String getGreenSignalEventString(){
+        return "GREEN signal at Phase "+phase+", vehicles will now start moving in this phase\n";
+    }
+
+    private String getRedSignalEventString(){
+        return "RED signal at Phase "+phase+", vehicles stopping in this phase\n";
+    }
+
 }

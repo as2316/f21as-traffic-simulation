@@ -26,7 +26,13 @@ public class GUIManager {
 
     List<String> eventLogs;
 
-    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission) throws GUI_Manager_Exception {
+    interface ExitEventHandler {
+        public void onExitButtonPressed();
+    }
+
+    ExitEventHandler exitEventHandler;
+
+    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission, ExitEventHandler exitEventHandler) throws GUI_Manager_Exception {
         if (vehicles == null)
             throw new GUI_Manager_Exception("Vehicles table cannot be NULL");
         if (phases == null)
@@ -40,6 +46,7 @@ public class GUIManager {
         phasesList = phases;
         statisticsList = statistics;
         emissionList = emission;
+        this.exitEventHandler = exitEventHandler;
     }
 
     private JFrame frame;
@@ -177,7 +184,7 @@ public class GUIManager {
         exit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //todo: do
+                exitEventHandler.onExitButtonPressed();
             }
         });
 
@@ -218,8 +225,10 @@ public class GUIManager {
         }
     }
 
-    public void setEventLog(List<String> events){
-
+    public void saveEventLog(List<String> events){
+        Report_Generator reportGenerator = new Report_Generator(events);
+        reportGenerator.write_to_file();
+        System.exit(0);
     }
 
 }
