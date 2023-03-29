@@ -157,4 +157,17 @@ public class Vehicle {
         row[7] = this.segment.toString();
         return row;
     }
+
+    public void printInCSVFormat(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.id+",");
+        sb.append(this.type+",");
+        sb.append(this.crossingTime+",");
+        sb.append(this.direction+",");
+        sb.append(this.length+",");
+        sb.append(this.emission+",");
+        sb.append(this.status+",");
+        sb.append(this.segment+",");
+        System.out.println(sb);
+    }
 }

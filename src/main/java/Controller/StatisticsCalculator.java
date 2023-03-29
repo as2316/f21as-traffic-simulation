@@ -1,6 +1,7 @@
 package Controller;
 
 import models.Segment;
+import models.Status;
 import models.Vehicle;
 
 import java.util.List;
@@ -12,16 +13,22 @@ public class StatisticsCalculator {
     int[][] statisticsData;
 
     public StatisticsCalculator(List<Vehicle> vehicleList){
+        updateVehicleList(vehicleList);
+    }
+
+    public void updateVehicleList(List<Vehicle> vehicleList){
         if (vehicleList == null) throw new IllegalArgumentException("Vehicles list cannot be NULL");
         this.vehicleList = vehicleList;
         statisticsData = new int[4][3];
     }
 
-    public int[][] calculateSegmentData(){
+    public int[][] calculateStatisticsData(){
         for(Vehicle v: vehicleList){
-            int index = getSegmentIndex(v.getSegment());
-            statisticsData[index][1] += v.getLength();
-            statisticsData[index][2] += v.getCrossingTime();
+            if(v.getStatus() == Status.WAITING){
+                int index = getSegmentIndex(v.getSegment());
+                statisticsData[index][1] += v.getLength();
+                statisticsData[index][2] += v.getCrossingTime();
+            }
         }
         return statisticsData;
     }
