@@ -24,11 +24,11 @@ public class GUIRowUtils {
         return rows;
     }
 
-    public static String[][] segmentStatsRows(int[][] statisticsData){
+    public static String[][] segmentStatsRows(int[][] statisticsData, int[] waitingTimeData){
         String[][] rows = new String[4][4];
         for(int i=0; i< rows.length; i++){
             rows[i][0] = Segment.fromRowValue(i).toString();
-            rows[i][1] = "NA";  //TODO: Stage 2
+            rows[i][1] = String.valueOf(waitingTimeData[i]);  //TODO: Stage 2
             rows[i][2] = statisticsData[i][1] + " m";
             rows[i][3] = statisticsData[i][2] + " s";
         }

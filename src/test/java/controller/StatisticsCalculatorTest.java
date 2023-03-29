@@ -19,7 +19,7 @@ class StatisticsCalculatorTest {
         vehicleList.add(new Vehicle("2",VehicleType.TRUCK,20,Direction.STRAIGHT,30,10,Status.WAITING,Segment.S1));
         vehicleList.add(new Vehicle("3",VehicleType.BUS,15,Direction.RIGHT,100,40,Status.WAITING,Segment.S1));
         var statistics = new StatisticsCalculator(vehicleList);
-        var calculation = statistics.calculateSegmentData();
+        var calculation = statistics.calculateStatisticsData();
         assertEquals(130, calculation[0][1], "Length calculation error S1");
         assertEquals(25, calculation[1][1], "Length calculation error S2");
         assertEquals(35, calculation[0][2], "Crossing time calculation error S1");
