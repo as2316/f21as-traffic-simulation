@@ -1,5 +1,7 @@
 package view;
 
+import Controller.Report_Generator;
+import Controller.phase_simulation.Random_Vehicles_Caller;
 import exceptions.GUI_Manager_Exception;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,7 +24,15 @@ public class GUIManager {
     String[][] statisticsList;
     String[][] emissionList;
 
-    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission) throws GUI_Manager_Exception {
+    List<String> eventLogs;
+
+    interface ExitEventHandler {
+        public void onExitButtonPressed();
+    }
+
+    ExitEventHandler exitEventHandler;
+
+    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission, ExitEventHandler exitEventHandler) throws GUI_Manager_Exception {
         if (vehicles == null)
             throw new GUI_Manager_Exception("Vehicles table cannot be NULL");
         if (phases == null)
@@ -35,6 +46,7 @@ public class GUIManager {
         phasesList = phases;
         statisticsList = statistics;
         emissionList = emission;
+        this.exitEventHandler = exitEventHandler;
     }
 
     private JFrame frame;
@@ -43,6 +55,9 @@ public class GUIManager {
     private JTable statistics_table;
     private JTable add_vehicles_table;
     private JTable emission_table;
+
+    DefaultTableModel vehicles_table_model;
+    DefaultTableModel statistics_table_model;
 
     public void initialize_GUI(){
         // Step 1: Create the JFrame
@@ -73,7 +88,7 @@ public class GUIManager {
         String[] vehicles_table_cols_titles = {"Vehicle", "Type", "Crossing Time", "Direction", "Length", "Emission", "Status", "Segment"};
 
         vehicles_table = new JTable(vehiclesList, vehicles_table_cols_titles);
-        DefaultTableModel vehicles_table_model = new DefaultTableModel(vehiclesList, vehicles_table_cols_titles) {
+        vehicles_table_model = new DefaultTableModel(vehiclesList, vehicles_table_cols_titles) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -114,7 +129,7 @@ public class GUIManager {
         String[] statistics_table_cols_title = {"Segment", "Waiting Time", "Waiting Length", "Cross Time"};
 
         statistics_table = new JTable(statisticsList, statistics_table_cols_title);
-        DefaultTableModel statistics_table_model = new DefaultTableModel(statisticsList, statistics_table_cols_title) {
+        statistics_table_model = new DefaultTableModel(statisticsList, statistics_table_cols_title) {
 
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -165,10 +180,11 @@ public class GUIManager {
 
         panel.add(exit_button);
 
+        // generate the report on this location
         exit_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                exitEventHandler.onExitButtonPressed();
             }
         });
 
@@ -189,6 +205,30 @@ public class GUIManager {
         cancel_button.setBounds(250, 350, 80, 30);
         panel.add(cancel_button);
         frame.setVisible(true);
+    }
+
+    public void updateVehiclesTable(String[][] vehiclesList){
+        if(vehicles_table_model != null){
+            vehicles_table_model.setRowCount(0);
+            for(String[] row: vehiclesList){
+                vehicles_table_model.addRow(row);
+            }
+        }
+    }
+
+    public void updateStatistics(String[][] statisticsList){
+        if(statistics_table_model != null){
+            statistics_table_model.setRowCount(0);
+            for(String[] row: statisticsList){
+                statistics_table_model.addRow(row);
+            }
+        }
+    }
+
+    public void saveEventLog(List<String> events){
+        Report_Generator reportGenerator = new Report_Generator(events);
+        reportGenerator.write_to_file();
+        System.exit(0);
     }
 
 }

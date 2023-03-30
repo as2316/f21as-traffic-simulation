@@ -29,10 +29,39 @@ public class Vehicle {
     }
 
     public Phase getVehiclePhase(){
-        /**
-         * TODO: Write logic to return correct phase for a vehicle
-         */
-        return Phase.p1;
+        if (this.segment == Segment.S1) {
+            if (this.direction == Direction.LEFT) {
+                return Phase.p1;
+            }
+            else {
+                return Phase.p6;
+            }
+        }
+        if (this.segment == Segment.S2) {
+            if (this.direction == Direction.LEFT) {
+                return Phase.p2;
+            }
+            else {
+                return Phase.p5;
+            }
+        }
+        if (this.segment == Segment.S3) {
+            if (this.direction == Direction.LEFT) {
+                return Phase.p3;
+            }
+            else {
+                return Phase.p8;
+            }
+        }
+        if (this.segment == Segment.S4) {
+            if (this.direction == Direction.LEFT) {
+                return Phase.p4;
+            }
+            else {
+                return Phase.p7;
+            }
+        }
+        return null;
     }
 
     /* GETTERS */
@@ -127,5 +156,18 @@ public class Vehicle {
         row[6] = this.status.toString();
         row[7] = this.segment.toString();
         return row;
+    }
+
+    public void printInCSVFormat(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.id+",");
+        sb.append(this.type+",");
+        sb.append(this.crossingTime+",");
+        sb.append(this.direction+",");
+        sb.append(this.length+",");
+        sb.append(this.emission+",");
+        sb.append(this.status+",");
+        sb.append(this.segment+",");
+        System.out.println(sb);
     }
 }
