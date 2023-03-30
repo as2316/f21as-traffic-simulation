@@ -1,6 +1,7 @@
 package view;
 
 import Controller.Report_Generator;
+import Controller.phase_simulation.PhaseManager;
 import Controller.phase_simulation.Random_Vehicles_Caller;
 import exceptions.GUI_Manager_Exception;
 
@@ -24,6 +25,8 @@ public class GUIManager {
     String[][] statisticsList;
     String[][] emissionList;
 
+    PhaseManager phaseManager;
+
     List<String> eventLogs;
 
     interface ExitEventHandler {
@@ -32,7 +35,7 @@ public class GUIManager {
 
     ExitEventHandler exitEventHandler;
 
-    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission, ExitEventHandler exitEventHandler) throws GUI_Manager_Exception {
+    public GUIManager(String[][] vehicles, String[][] phases, String[][] statistics, String[][] emission, ExitEventHandler exitEventHandler, PhaseManager phaseManager) throws GUI_Manager_Exception {
         if (vehicles == null)
             throw new GUI_Manager_Exception("Vehicles table cannot be NULL");
         if (phases == null)
@@ -47,6 +50,7 @@ public class GUIManager {
         statisticsList = statistics;
         emissionList = emission;
         this.exitEventHandler = exitEventHandler;
+        this.phaseManager = phaseManager;
     }
 
     private JFrame frame;
@@ -197,7 +201,7 @@ public class GUIManager {
         add_button.addActionListener(event -> 
         {
       	   frame.setEnabled(false);
-      	   AddVehicleForm form = new AddVehicleForm(frame, vehicles_table);
+      	   AddVehicleForm form = new AddVehicleForm(frame, phaseManager);
          });
 
         // Cancel Button:

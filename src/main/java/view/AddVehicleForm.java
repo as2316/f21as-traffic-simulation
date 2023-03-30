@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.*;
+import Controller.phase_simulation.PhaseManager;
 import models.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,13 +30,15 @@ public class AddVehicleForm extends JFrame implements Runnable{
     String[] vehicleStatus = { "WAITING", "CROSSED" };
     String[] segments = { "S1", "S2", "S3", "S4" };
 
+	PhaseManager phaseManager;
+
 	private JTable vehicles_table;
     
     
     //constructor
-    public AddVehicleForm(JFrame frame, JTable vehicleTable){
-        // New :
-		vehicles_table = vehicleTable;
+    public AddVehicleForm(JFrame frame, PhaseManager phaseManager){
+
+		this.phaseManager = phaseManager;
 
 		//set the title
         setTitle("New Vehicle");
@@ -149,12 +152,13 @@ public class AddVehicleForm extends JFrame implements Runnable{
         				Integer.parseInt(crossingTimeTxtField.getText()),Direction.valueOf(direction.getSelectedItem().toString()),
         				Integer.parseInt(lengthTxtField.getText()),Integer.parseInt(emissionTxtField.getText()),
         				Status.valueOf(status.getSelectedItem().toString()),Segment.valueOf(segment.getSelectedItem().toString()));
-        		//System.out.println(vehicle.toString());
 
-				DefaultTableModel model = (DefaultTableModel) vehicles_table.getModel();
-				model.addRow(new Object[]{vehicle.getId(), vehicle.getType(), vehicle.getCrossingTime(), vehicle.getDirection(), vehicle.getLength(), vehicle.getEmission(), vehicle.getStatus(), vehicle.getSegment()});
 				setVisible(false);
 				frame.setEnabled(true);
+
+				if(phaseManager != null){
+					phaseManager.addVehicle(vehicle);
+				}
 			}
 //        	System.out.println();
 

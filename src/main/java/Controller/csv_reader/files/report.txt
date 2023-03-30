@@ -88,9 +88,37 @@ Vehicle N87514 ADDED to Segment S3 (Phase p8)
 
 GREEN signal at Phase p1, vehicles will now start moving in this phase
 
-Vehicle N75190 ADDED to Segment S3 (Phase p8)
+Vehicle F71259 ADDED to Segment S2 (Phase p5)
 
 Vehicle A82401 CROSSED Segment S1 (Phase p1)
 
 Vehicle D94860 CROSSED Segment S1 (Phase p1)
+
+Vehicle N34297 CROSSED Segment S1 (Phase p1)
+
+Vehicle A61890 CROSSED Segment S1 (Phase p1)
+
+Vehicle E90643 ADDED to Segment S3 (Phase p8)
+
+Vehicle B08926 CROSSED Segment S1 (Phase p1)
+
+RED signal at Phase p1, vehicles stopping in this phase
+
+GREEN signal at Phase p2, vehicles will now start moving in this phase
+
+Vehicle 3423ds ADDED to Segment S1 (Phase p1)
+
+Vehicle H56317 CROSSED Segment S2 (Phase p2)
+
+Vehicle M47035 ADDED to Segment S2 (Phase p2)
+
+Vehicle E23951 CROSSED Segment S2 (Phase p2)
+
+Vehicle L83297 CROSSED Segment S2 (Phase p2)
+
+RED signal at Phase p2, vehicles stopping in this phase
+
+GREEN signal at Phase p3, vehicles will now start moving in this phase
+
+Vehicle K86753 CROSSED Segment S3 (Phase p3)
 
