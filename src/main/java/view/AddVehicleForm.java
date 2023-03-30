@@ -11,7 +11,7 @@ import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.Console;
 
-public class AddVehicleForm extends JFrame{
+public class AddVehicleForm extends JFrame implements Runnable{
 
     //declaring the components
     JLabel vehicleLabel, typeLabel, crossingTimeLabel, directionLabel, 
@@ -43,9 +43,9 @@ public class AddVehicleForm extends JFrame{
         setLocationRelativeTo(null);
         setLayout(null);
         setSize(350, 350);
-  
+
         //instantiate the components
-        
+
         //---Labels---//
         vehicleLabel = new JLabel("Vehicle:");
         typeLabel = new JLabel("Type:");
@@ -57,90 +57,90 @@ public class AddVehicleForm extends JFrame{
         segmentLabel = new JLabel("Segment:");
         error = new JLabel();
         error.setForeground(Color.red);
-        
+
         //---TextFields---//
         vehicleTxtField = new JTextField();
         crossingTimeTxtField = new JTextField();
         lengthTxtField = new JTextField();
         emissionTxtField = new JTextField();
-        
+
         //---ComboBox---//
         type = new JComboBox<Object>(vehicleType);
         direction = new JComboBox<Object>(directions);
         status = new JComboBox<Object>(vehicleStatus);
         segment = new JComboBox<Object>(segments);
-        
-        
+
+
         //---Buttons---//
         addBtn = new JButton("Add");
         cancelBtn = new JButton("Cancel");
-        
+
         //set the bounds
         vehicleLabel.setBounds(10,0,100,30);
         vehicleTxtField.setBounds(120,0,150,30);
-        
+
         typeLabel.setBounds(10,30,100,30);
         type.setBounds(120,30,150,30);
-        
+
         crossingTimeLabel.setBounds(10,60,100,30);
         crossingTimeTxtField.setBounds(120,60,150,30);
-        
+
         directionLabel.setBounds(10, 90, 100, 30);
         direction.setBounds(120, 90, 150, 30);
-        
+
         lengthLabel.setBounds(10, 120, 100, 30);
         lengthTxtField.setBounds(120, 120, 150, 30);
-        
+
         emissionLabel.setBounds(10, 150, 100, 30);
         emissionTxtField.setBounds(120, 150, 150, 30);
-        
+
         statusLabel.setBounds(10, 180, 100, 30);
         status.setBounds(120, 180, 150, 30);
-        
+
         segmentLabel.setBounds(10, 210, 100, 30);
         segment.setBounds(120, 210, 150, 30);
-        
+
         addBtn.setBounds(10, 275, 100, 30);
         cancelBtn.setBounds(120, 275, 100, 30);
-        
+
         error.setBounds(30, 250, 350, 30);
-       
+
         //add the components
         add(vehicleLabel);
         add(vehicleTxtField);
-        
+
         add(typeLabel);
         add(type);
-        
+
         add(crossingTimeLabel);
         add(crossingTimeTxtField);
-        
+
         add(directionLabel);
         add(direction);
-        
+
         add(lengthLabel);
         add(lengthTxtField);
-        
+
         add(emissionLabel);
         add(emissionTxtField);
-        
+
         add(statusLabel);
         add(status);
-        
+
         add(segmentLabel);
         add(segment);
-        
+
         add(addBtn);
         add(cancelBtn);
 
         add(error);
-        
+
         //---VALIDATIONS---//
         vehicleFieldValidations();
         crossingTimeValidations();
         lengthFieldValidations();
         emissionFieldValidations();
-        
+
         //---ADD BUTTON---//
         addBtn.addActionListener(ae -> {
         	if(validateInput()) {
@@ -153,12 +153,14 @@ public class AddVehicleForm extends JFrame{
 
 				DefaultTableModel model = (DefaultTableModel) vehicles_table.getModel();
 				model.addRow(new Object[]{vehicle.getId(), vehicle.getType(), vehicle.getCrossingTime(), vehicle.getDirection(), vehicle.getLength(), vehicle.getEmission(), vehicle.getStatus(), vehicle.getSegment()});
-        	}
+				setVisible(false);
+				frame.setEnabled(true);
+			}
 //        	System.out.println();
-        		
+
         });
-        
-        
+
+
         //---CANCEL BUTTON---//
         cancelBtn.addActionListener(ce -> {
         	setVisible(false);
@@ -278,5 +280,9 @@ public class AddVehicleForm extends JFrame{
 		});
     }
 
-   
+
+	@Override
+	public void run() {
+
+	}
 }

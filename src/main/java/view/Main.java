@@ -13,8 +13,8 @@ import static Controller.GUIRowUtils.*;
 public class Main {
 
     //Please change this path according to your system
-    public static final String INTERSECTION_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Advanced-Software-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\intersection.csv";
-    public static final String VEHICLES_FILE_PATH = "C:\\Users\\Rami\\Desktop\\Advanced-Software-Project\\f21as-traffic-simulation\\src\\main\\java\\Controller\\csv_reader\\files\\vehicles.csv";
+    public static final String INTERSECTION_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE_CW/f21as-traffic-simulation/src/main/java/Controller/csv_reader/files/intersection.csv";
+    public static final String VEHICLES_FILE_PATH = "/Users/shubhamgupta_01/Documents/ASE_CW/f21as-traffic-simulation/src/main/java/Controller/csv_reader/files/vehicles.csv";
 
     //Main entry point of the system
     public static void main(String[] args) {
