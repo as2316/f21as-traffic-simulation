@@ -60,7 +60,8 @@ public class TrafficSimulator implements PhaseManager.VehicleListUpdateHandler, 
                     phasesRows(phasesList),
                     segmentStatsRows(statisticsData, new int[]{0,0,0,0}),
                     emissionStatsRow(emission),
-                    this
+                    this,
+                    phaseManager
             );
 
         } catch (
