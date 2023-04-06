@@ -19,6 +19,7 @@ class Report_GeneratorTest {
         reportGenerator.write_to_file();
 
         File report = new File("src/main/java/Controller/csv_reader/files/report.txt");
-        assertTrue(report.exists());
+
+        assertTrue(report.exists(),"File doesn't exist");
     }
 }
