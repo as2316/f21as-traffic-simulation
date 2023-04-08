@@ -9,7 +9,7 @@ public class Report_Generator {
     private List<String> file_text;
 
     public Report_Generator(List<String> file_text){
-        this.output_file_path = "f21as/src/main/java/Controller/csv_reader/files/report.txt";
+        this.output_file_path = "src/main/java/Controller/csv_reader/files/report.txt";
         this.file_text = file_text;
     }
 
